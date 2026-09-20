@@ -65,4 +65,19 @@
       form.classList.add("is-sent");
     });
   }
+
+  /* Entwurfsleiste: Link zur umschaltbaren Ansicht (Desktop / iPad / iPhone).
+     Gibt es nur im Entwurf – mit der Leiste entfällt beim Livegang auch dieser Link.
+     Innerhalb der Ansicht selbst (Seite läuft im Rahmen) wird er nicht gezeigt. */
+  var leiste = document.querySelector(".proto-bar");
+  var skript = document.querySelector('script[src$="assets/site.js"]');
+  if (leiste && skript && window.self === window.top) {
+    var wurzel = new URL("..", skript.src);
+    var seite = location.href.split(/[?#]/)[0].replace(wurzel.href, "") || "index.html";
+    var ziel = location.protocol === "file:" ? new URL("../tools/ansicht.html", wurzel) : new URL("ansicht.html", wurzel);
+    var link = document.createElement("a");
+    link.href = ziel.href + "?seite=" + encodeURIComponent(seite) + "&geraet=iphone";
+    link.textContent = "Smartphone-Ansicht →";
+    leiste.appendChild(link);
+  }
 })();

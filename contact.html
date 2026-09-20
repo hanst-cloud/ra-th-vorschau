@@ -7,9 +7,11 @@
 <title>Kontakt – Rechtsanwalt Hans Theisen, Bautzner Straße 79, Dresden</title>
 <meta name="description" content="Rechtsanwalt Hans Theisen, Bautzner Straße 79, 01099 Dresden. Telefon 0351 418 90 711, mail@ra-th.de. Anfrage per Formular oder Termin online buchen.">
 <link rel="canonical" href="https://www.ra-th.de/contact">
+<meta property="og:type" content="website">
 <meta property="og:title" content="Kontakt – Rechtsanwalt Hans Theisen, Dresden">
 <meta property="og:description" content="Bautzner Straße 79, 01099 Dresden · 0351 418 90 711 · mail@ra-th.de">
 <meta property="og:url" content="https://www.ra-th.de/contact">
+<meta property="og:image" content="https://images.squarespace-cdn.com/content/v1/682710b074de6d08b1bcdc18/1747390653409-C3JNY08ORFVOVQZDY8PZ/8766.jpg?format=1500w">
 <meta property="og:locale" content="de_DE">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,11 +21,11 @@
 </head>
 <body>
 <a class="skip" href="#main">Zum Inhalt</a>
-<div class="proto-bar">Vorschau der neuen Website — Entwurf, Stand 06.09.2026</div>
+<div class="proto-bar">Vorschau der neuen Website – Entwurf, Stand 20.09.2026</div>
 
 <header class="site-head">
   <div class="wrap head-row">
-    <a class="brand" href="index.html">Hans Theisen <span>· Rechtsanwalt</span></a>
+    <a class="brand" href="index.html" aria-label="Hans Theisen, Rechtsanwalt – zur Startseite">hans theisen<span class="bar">|</span>rechtsanwalt</a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav">Menü</button>
     <nav id="nav" class="nav" aria-label="Hauptnavigation">
       <a href="anwaltundkanzlei.html">Kanzlei</a>
@@ -31,6 +33,7 @@
       <a href="vertragsrecht.html">Vertragsrecht</a>
       <a href="strafrecht.html">Strafrecht</a>
       <a href="konfliktmanagement.html">Konfliktlösung</a>
+      <a href="virtuelle-kanzlei-index.html">Beratung</a>
       <a href="blog/index.html">Videos</a>
       <a href="contact.html">Kontakt</a>
       <a class="nav-cta" href="terminvereinbarung.html">Termin</a>
@@ -39,11 +42,19 @@
 </header>
 
 <main id="main">
-  <div class="wrap page-head">
-    <div class="eyebrow">Kontakt</div>
-    <h1>Rechtsanwalt Hans Theisen, Dresden</h1>
-    <p class="lead">Anruf, E-Mail, Formular oder gleich ein Termin — wählen Sie, was Ihnen am leichtesten fällt.</p>
-  </div>
+  <section class="photo-hero is-portrait" style="--fx:50%;--fy:12%">
+    <img src="https://images.squarespace-cdn.com/content/v1/682710b074de6d08b1bcdc18/1747390653409-C3JNY08ORFVOVQZDY8PZ/8766.jpg?format=1500w" srcset="https://images.squarespace-cdn.com/content/v1/682710b074de6d08b1bcdc18/1747390653409-C3JNY08ORFVOVQZDY8PZ/8766.jpg?format=750w 750w, https://images.squarespace-cdn.com/content/v1/682710b074de6d08b1bcdc18/1747390653409-C3JNY08ORFVOVQZDY8PZ/8766.jpg?format=1500w 1500w, https://images.squarespace-cdn.com/content/v1/682710b074de6d08b1bcdc18/1747390653409-C3JNY08ORFVOVQZDY8PZ/8766.jpg?format=2500w 2500w" sizes="100vw" alt="Rechtsanwalt Hans Theisen, im Vordergrund Figuren des Schachspiels" width="2500" height="1636" fetchpriority="high" decoding="async">
+    <div class="wrap photo-hero-text">
+      <div class="eyebrow">Kontakt</div>
+      <h1>Rechtsanwalt Hans Theisen, Dresden</h1>
+    </div>
+  </section>
+
+  <section class="intro">
+    <div class="wrap hero-text">
+      <p class="lead">Anruf, E-Mail, Formular oder gleich ein Termin – wählen Sie, was Ihnen am leichtesten fällt.</p>
+    </div>
+  </section>
 
   <section class="sec">
     <div class="wrap kontakt">
@@ -75,6 +86,7 @@
         <label>Worum geht es?
           <select name="thema">
             <option value="">Bitte wählen</option>
+            <option>Beratung allgemein</option>
             <option>Arbeitsrecht – Kündigung</option>
             <option>Arbeitsrecht – Abmahnung</option>
             <option>Arbeitsrecht – Mobbing</option>
@@ -82,13 +94,14 @@
             <option>Vertragsrecht</option>
             <option>Strafrecht</option>
             <option>Mediation / Gütestelle</option>
+            <option>Zweite Meinung zu einem laufenden Verfahren</option>
             <option>Sonstiges</option>
           </select>
         </label>
         <label>Ihre Nachricht<textarea name="nachricht" required></textarea></label>
         <label class="consent"><input type="checkbox" name="einwilligung" required><span>Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung der Anfrage verwendet werden. Hinweise in der <a href="datenschutz.html">Datenschutzerklärung</a>.</span></label>
         <div class="cta-row"><button class="btn" type="submit">Anfrage senden</button><span class="hint">Öffnet Ihr E-Mail-Programm mit der fertigen Nachricht.</span></div>
-        <div class="ok">Ihr E-Mail-Programm sollte sich jetzt mit der Nachricht geöffnet haben. Bitte dort auf „Senden" klicken.</div>
+        <div class="ok">Ihr E-Mail-Programm sollte sich jetzt mit der Nachricht geöffnet haben. Bitte dort auf „Senden“ klicken.</div>
       </form>
     </div>
   </section>
@@ -96,9 +109,14 @@
 
 <footer class="site-foot">
   <div class="wrap foot-grid">
-    <div><div class="foot-brand">Hans Theisen · Rechtsanwalt</div><address>Bautzner Straße 79<br>01099 Dresden</address><a href="tel:+4935141890711">0351 418 90 711</a><br><a href="mailto:mail@ra-th.de">mail@ra-th.de</a></div>
+    <div>
+      <div class="foot-brand">hans theisen<span class="bar">|</span>rechtsanwalt</div>
+      <address>Bautzner Straße 79<br>01099 Dresden</address>
+      <a href="tel:+4935141890711">0351 418 90 711</a><br>
+      <a href="mailto:mail@ra-th.de">mail@ra-th.de</a>
+    </div>
     <div><div class="foot-h">Rechtsgebiete</div><ul><li><a href="arbeitsrecht.html">Arbeitsrecht</a></li><li><a href="vertragsrecht.html">Vertragsrecht</a></li><li><a href="strafrecht.html">Strafrecht</a></li></ul></div>
-    <div><div class="foot-h">Konfliktlösung</div><ul><li><a href="konfliktmanagement.html">Konfliktmanagement</a></li><li><a href="mediation.html">Gütestelle &amp; Mediation</a></li><li><a href="prozessvertretung.html">Prozessvertretung</a></li><li><a href="virtuelle-kanzlei-index.html">Virtuelle Kanzlei</a></li></ul></div>
+    <div><div class="foot-h">Beratung und Konfliktlösung</div><ul><li><a href="virtuelle-kanzlei-index.html">Beratungsangebote</a></li><li><a href="konfliktmanagement.html">Konfliktmanagement</a></li><li><a href="mediation.html">Gütestelle &amp; Mediation</a></li><li><a href="prozessvertretung.html">Prozessvertretung</a></li></ul></div>
     <div><div class="foot-h">Kanzlei</div><ul><li><a href="anwaltundkanzlei.html">Anwalt und Kanzlei</a></li><li><a href="blog/index.html">Videoblog</a></li><li><a href="https://secure.e-consult-ag.de/e.consult.412/webakte/userReg.asp" rel="noopener">WebAkte</a></li><li><a href="https://www.youtube.com/@HansTheisenRechtsanwaltDresden" rel="noopener">YouTube</a></li><li><a href="https://www.linkedin.com/in/hans-theisen-17211067/" rel="noopener">LinkedIn</a></li></ul></div>
   </div>
   <div class="wrap foot-legal"><span>© 2026 Rechtsanwalt Hans Theisen</span><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></div>

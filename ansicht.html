@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Ansicht – Entwurf ra-th.de</title>
+<!--
+  Werkzeug für den Entwurf, kein Teil der Website: zeigt die Seiten aus site/ wahlweise
+  in Desktop-Breite, im iPad- oder im iPhone-Format und liefert einen QR-Code für das echte Telefon.
+  Aufruf:  lokal per Doppelklick auf diese Datei, über den Vorschau-Server unter /ansicht.html
+           oder in der öffentlichen Vorschau unter …/ra-th-vorschau/ansicht.html.
+  Beim Livegang wird diese Datei nicht mit veröffentlicht.
+-->
+<style>
+  :root { --bg: #131817; --panel: #1C2322; --line: #2F3A38; --text: #E9E7E1; --muted: #9AA5A1; --accent: #8FBBA4; --accent-ink: #10150F; --copper: #D9A070; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; overflow: hidden; }
+
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 10px 18px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  .title { font-size: 15px; letter-spacing: .01em; margin-right: auto; white-space: nowrap; }
+  .title b { font-weight: 600; }
+  .title span { color: var(--muted); }
+
+  .seg { display: inline-flex; border: 1px solid var(--line); }
+  .seg button { font: 600 13.5px/1 inherit; font-family: inherit; color: var(--muted); background: transparent; border: 0; border-right: 1px solid var(--line); padding: 10px 16px; cursor: pointer; }
+  .seg button:last-child { border-right: 0; }
+  .seg button:hover { color: var(--text); }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+
+  label.pick { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  select { font: 14px inherit; font-family: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); padding: 8px 10px; max-width: 46vw; }
+  .tool { font: 600 13.5px/1 inherit; font-family: inherit; color: var(--text); background: transparent; border: 1px solid var(--line); padding: 10px 14px; cursor: pointer; text-decoration: none; white-space: nowrap; }
+  .tool:hover { border-color: var(--accent); color: var(--accent); }
+  .tool.is-strong { border-color: var(--copper); color: var(--copper); }
+  button:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--copper); outline-offset: 2px; }
+
+  .stage { flex: 1; min-height: 0; overflow: auto; display: flex; justify-content: center; align-items: flex-start; padding: 18px; }
+  .stage[data-dev="desktop"] { padding: 0; }
+  .fit { flex: none; }
+  .stage[data-dev="desktop"] .fit { width: 100%; height: 100%; }
+  .device { transform-origin: top left; background: #0B0E0D; border-radius: 46px; padding: 14px; box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 0 1px #3A4542; }
+  .stage[data-dev="ipad"] .device { border-radius: 34px; }
+  .stage[data-dev="desktop"] .device { width: 100%; height: 100%; padding: 0; border-radius: 0; box-shadow: none; transform: none !important; }
+  iframe { display: block; width: 100%; height: 100%; border: 0; background: #FFFFFF; border-radius: 32px; }
+  .stage[data-dev="ipad"] iframe { border-radius: 20px; }
+  .stage[data-dev="desktop"] iframe { border-radius: 0; }
+
+  .status { padding: 6px 18px; font-size: 12.5px; color: var(--muted); background: var(--panel); border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 4px 20px; }
+  .status b { color: var(--text); font-weight: 600; }
+
+  .qr { position: fixed; right: 18px; top: 64px; z-index: 10; width: min(360px, calc(100vw - 36px)); background: var(--panel); border: 1px solid var(--line); box-shadow: 0 18px 50px rgba(0,0,0,.55); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .qr[hidden] { display: none; }
+  .qr h2 { margin: 0; font-size: 17px; font-weight: 600; }
+  .qr p { margin: 0; font-size: 13.5px; color: var(--muted); }
+  .qr ol { margin: 0; padding-left: 20px; font-size: 13.5px; color: var(--muted); }
+  .qr .code { background: #FFFFFF; padding: 10px; align-self: center; width: 232px; height: 232px; display: grid; place-items: center; color: #333; font-size: 13px; text-align: center; }
+  .qr .code svg { width: 100%; height: 100%; display: block; }
+  .qr .adr { font: 13px/1.4 ui-monospace, Consolas, monospace; color: var(--text); word-break: break-all; background: var(--bg); border: 1px solid var(--line); padding: 8px 10px; }
+  .qr .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .qr .hinweis { color: var(--copper); }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="title"><b>Entwurf ra-th.de</b> <span>· Ansicht</span></div>
+  <div class="seg" role="group" aria-label="Gerät wählen">
+    <button type="button" data-dev="desktop" aria-pressed="true">Desktop</button>
+    <button type="button" data-dev="ipad" aria-pressed="false">iPad</button>
+    <button type="button" data-dev="iphone" aria-pressed="false">iPhone</button>
+  </div>
+  <label class="pick">Seite
+    <select id="seite">
+      <option value="index.html">Startseite</option>
+      <option value="anwaltundkanzlei.html">Kanzlei</option>
+      <option value="arbeitsrecht.html">Arbeitsrecht</option>
+      <option value="vertragsrecht.html">Vertragsrecht</option>
+      <option value="strafrecht.html">Strafrecht</option>
+      <option value="konfliktmanagement.html">Konfliktlösung</option>
+      <option value="mediation.html">Gütestelle &amp; Mediation</option>
+      <option value="prozessvertretung.html">Prozessvertretung</option>
+      <option value="virtuelle-kanzlei-index.html">Beratung</option>
+      <option value="blog/index.html">Videos</option>
+      <option value="contact.html">Kontakt</option>
+      <option value="terminvereinbarung.html">Termin</option>
+      <option value="impressum.html">Impressum</option>
+      <option value="datenschutz.html">Datenschutz</option>
+    </select>
+  </label>
+  <button type="button" class="tool is-strong" id="qr-knopf" aria-expanded="false" aria-controls="qr">Aufs echte iPhone</button>
+  <a class="tool" id="eigen" target="_blank" rel="noopener">Seite allein öffnen</a>
+</header>
+
+<main class="stage" id="stage" data-dev="desktop">
+  <div class="fit" id="fit">
+    <div class="device" id="device"><iframe id="rahmen" title="Vorschau der Website"></iframe></div>
+  </div>
+</main>
+
+<div class="status"><span>Gerät: <b id="s-geraet">Desktop</b></span><span>Fläche: <b id="s-flaeche">volle Breite</b></span><span>Darstellung: <b id="s-massstab">100 %</b></span></div>
+
+<aside class="qr" id="qr" hidden aria-label="QR-Code für das Telefon">
+  <h2>Auf dem echten iPhone ansehen</h2>
+  <div class="code" id="qr-code">QR-Code wird erzeugt …</div>
+  <ol>
+    <li>Kamera-App des iPhones öffnen</li>
+    <li>auf den Code halten</li>
+    <li>die gelbe Einblendung antippen</li>
+  </ol>
+  <div class="adr" id="qr-adresse"></div>
+  <div class="row"><button type="button" class="tool" id="kopieren">Adresse kopieren</button><button type="button" class="tool" id="qr-zu">Schließen</button></div>
+  <p class="hinweis" id="qr-hinweis" hidden>Der Code führt zur öffentlichen Vorschau. Sie zeigt den zuletzt dorthin hochgeladenen Stand – nicht unbedingt das, was Sie gerade hier sehen.</p>
+</aside>
+
+<script>
+(function () {
+  "use strict";
+
+  var OEFFENTLICH = "https://hanst-cloud.github.io/ra-th-vorschau/";
+  var GERAETE = {
+    desktop: { name: "Desktop", w: 0, h: 0 },
+    ipad:    { name: "iPad (hochkant)", w: 820, h: 1180 },
+    iphone:  { name: "iPhone", w: 390, h: 844 }
+  };
+  var RAND = 28; // Gehäuserand links + rechts bzw. oben + unten
+
+  // Lokal per Doppelklick liegt diese Datei in tools/, die Website daneben in site/.
+  var BASIS = location.protocol === "file:" ? "../site/" : "./";
+
+  var stage = document.getElementById("stage"), fit = document.getElementById("fit"),
+      device = document.getElementById("device"), rahmen = document.getElementById("rahmen"),
+      wahl = document.getElementById("seite"), eigen = document.getElementById("eigen"),
+      knoepfe = document.querySelectorAll(".seg button");
+
+  function merke(k, v) { try { localStorage.setItem("ansicht-" + k, v); } catch (e) {} }
+  function hole(k) { try { return localStorage.getItem("ansicht-" + k); } catch (e) { return null; } }
+
+  var p = new URLSearchParams(location.search);
+  var geraet = p.get("geraet") || hole("geraet") || "desktop";
+  if (!GERAETE[geraet]) geraet = "desktop";
+  var seite = (p.get("seite") || hole("seite") || "index.html").replace(/^\/+/, "");
+  if (/^[a-z]+:|\.\.|\/\//i.test(seite)) seite = "index.html";      // nur Seiten dieser Website
+
+  function zeigeSeite(s) {
+    seite = s; merke("seite", s);
+    rahmen.src = BASIS + s;
+    eigen.href = BASIS + s;
+    var passt = Array.prototype.some.call(wahl.options, function (o) { return o.value === s; });
+    if (passt) wahl.value = s;
+    if (!document.getElementById("qr").hidden) zeichneQR();
+  }
+
+  // Telefone und Tablets haben keinen festen Rollbalken, der Breite kostet. Im Geräterahmen wird er
+  // deshalb ausgeblendet (gescrollt wird weiter mit Mausrad oder Finger). Bei Doppelklick-Aufruf
+  // verhindert der Browserschutz den Zugriff auf den Rahmen – dann bleibt der Balken einfach stehen.
+  function rollbalken() {
+    try {
+      var doc = rahmen.contentDocument; if (!doc || !doc.head) return;
+      var st = doc.getElementById("ansicht-rollbalken");
+      if (geraet === "desktop") { if (st) st.remove(); return; }
+      if (!st) {
+        st = doc.createElement("style"); st.id = "ansicht-rollbalken";
+        st.textContent = "html{scrollbar-width:none}html::-webkit-scrollbar{display:none}";
+        doc.head.appendChild(st);
+      }
+    } catch (e) {}
+  }
+
+  function passeAn() {
+    var g = GERAETE[geraet];
+    rollbalken();
+    stage.setAttribute("data-dev", geraet);
+    knoepfe.forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-dev") === geraet ? "true" : "false"); });
+    document.getElementById("s-geraet").textContent = g.name;
+    if (!g.w) {
+      device.style.cssText = ""; fit.style.cssText = "";
+      document.getElementById("s-flaeche").textContent = "volle Breite";
+      document.getElementById("s-massstab").textContent = "100 %";
+      return;
+    }
+    var bw = g.w + RAND, bh = g.h + RAND;
+    var s = Math.min(1, (stage.clientHeight - 36) / bh, (stage.clientWidth - 36) / bw);
+    s = Math.max(s, 0.3);
+    device.style.width = bw + "px"; device.style.height = bh + "px"; device.style.transform = "scale(" + s + ")";
+    fit.style.width = Math.round(bw * s) + "px"; fit.style.height = Math.round(bh * s) + "px";
+    document.getElementById("s-flaeche").textContent = g.w + " × " + g.h + " Punkte";
+    document.getElementById("s-massstab").textContent = Math.round(s * 100) + " %" + (s < 1 ? " (verkleinert, damit das Gerät ganz ins Fenster passt)" : "");
+  }
+
+  knoepfe.forEach(function (b) {
+    b.addEventListener("click", function () { geraet = b.getAttribute("data-dev"); merke("geraet", geraet); passeAn(); });
+  });
+  wahl.addEventListener("change", function () { zeigeSeite(wahl.value); });
+  window.addEventListener("resize", passeAn);
+
+  // Wer im Rahmen weiterklickt, soll oben die richtige Seite sehen (klappt nicht bei Doppelklick-Aufruf: Browserschutz).
+  rahmen.addEventListener("load", function () {
+    rollbalken();
+    try {
+      var pfad = rahmen.contentWindow.location.pathname;
+      var wurzel = new URL(BASIS, location.href).pathname;
+      var rel = pfad.indexOf(wurzel) === 0 ? pfad.slice(wurzel.length) : pfad.replace(/^\/+/, "");
+      if (rel === "" || /\/$/.test(rel)) rel += "index.html";
+      if (!/\.html$/.test(rel)) rel += ".html";
+      seite = rel; merke("seite", rel); eigen.href = BASIS + rel;
+      var passt = Array.prototype.some.call(wahl.options, function (o) { return o.value === rel; });
+      if (passt) wahl.value = rel;
+      if (!document.getElementById("qr").hidden) zeichneQR();
+    } catch (e) {}
+  });
+
+  /* ── QR-Code für das echte Telefon ── */
+  var qr = document.getElementById("qr"), qrKnopf = document.getElementById("qr-knopf");
+  var lokal = location.protocol === "file:" || /^(localhost|127\.|\[::1\])/.test(location.host);
+
+  function zielAdresse() {
+    var wurzel = lokal ? OEFFENTLICH : new URL("./", location.href).href;
+    return wurzel + (seite === "index.html" ? "" : seite);
+  }
+
+  function ladeBibliothek(fertig, fehler) {
+    if (window.qrcode) { fertig(); return; }
+    var s = document.createElement("script");
+    s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js";
+    s.integrity = "sha384-mZT2gIty7ZDdOGkxfP6joZcYdMW1Jvj9dRlfpTmaJAKKXTqzygtB22k7FLe+KZC1";
+    s.crossOrigin = "anonymous";
+    s.onload = fertig; s.onerror = fehler;
+    document.head.appendChild(s);
+  }
+
+  function zeichneQR() {
+    var adresse = zielAdresse(), feld = document.getElementById("qr-code");
+    document.getElementById("qr-adresse").textContent = adresse;
+    document.getElementById("qr-hinweis").hidden = !lokal;
+    ladeBibliothek(function () {
+      var q = window.qrcode(0, "M"); q.addData(adresse); q.make();
+      var n = q.getModuleCount(), d = "";
+      for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) d += "M" + c + " " + r + "h1v1h-1z";
+      feld.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 -3 ' + (n + 6) + " " + (n + 6) + '" shape-rendering="crispEdges" role="img" aria-label="QR-Code"><path d="' + d + '" fill="#000000"/></svg>';
+    }, function () {
+      feld.textContent = "Der QR-Code braucht eine Internetverbindung. Die Adresse unten lässt sich auch abtippen oder kopieren.";
+    });
+  }
+
+  function schalteQR(auf) {
+    qr.hidden = !auf; qrKnopf.setAttribute("aria-expanded", auf ? "true" : "false");
+    if (auf) zeichneQR();
+  }
+  qrKnopf.addEventListener("click", function () { schalteQR(qr.hidden); });
+  document.getElementById("qr-zu").addEventListener("click", function () { schalteQR(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") schalteQR(false); });
+  document.getElementById("kopieren").addEventListener("click", function () {
+    var knopf = this, adresse = zielAdresse();
+    var ok = function () { knopf.textContent = "Kopiert"; setTimeout(function () { knopf.textContent = "Adresse kopieren"; }, 1600); };
+    try { navigator.clipboard.writeText(adresse).then(ok, function () {}); } catch (e) {}
+  });
+
+  zeigeSeite(seite);
+  passeAn();
+})();
+</script>
+</body>
+</html>
