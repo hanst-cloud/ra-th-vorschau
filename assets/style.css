@@ -84,6 +84,12 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--copper); outlin
 .photo-hero.is-chess > img { filter: grayscale(1) contrast(1.02) brightness(1.38); }
 .photo-hero.is-chess::before { content: ""; position: absolute; inset: 0; z-index: -1; background: #557565; mix-blend-mode: multiply; }
 .photo-hero.is-slim { min-height: clamp(210px, 34vh, 320px); }
+/* Hochformat: Querformat-Fotos werden seitlich stark beschnitten. --fx-m setzt dafür einen eigenen
+   waagerechten Schwerpunkt (z. B. auf eines der beiden Heere statt auf die leere Mitte). */
+@media (max-width: 640px) {
+  .photo-hero > img { object-position: var(--fx-m, var(--fx, 50%)) var(--fy, 50%); }
+  .photo-hero.is-chess:not(.is-slim) { min-height: clamp(300px, 56vh, 520px); }
+}
 .photo-hero-text { width: 100%; display: flex; flex-direction: column; gap: 12px; padding-top: 96px; padding-bottom: clamp(26px, 4.5vw, 54px); }
 .photo-hero h1 { color: #FFFFFF; max-width: 21ch; text-shadow: 0 1px 28px rgba(0,0,0,.35); }
 .photo-hero .eyebrow { color: #EBCBAA; }
