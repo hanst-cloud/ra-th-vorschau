@@ -39,6 +39,18 @@
     });
   });
 
+  /* Terminkalender: wie die Videos erst nach Klick laden – der Anbieter (Acuity) sitzt in den USA. */
+  document.querySelectorAll("[data-kalender]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var kasten = btn.closest(".booking");
+      var f = document.createElement("iframe");
+      f.src = btn.getAttribute("data-kalender");
+      f.title = "Terminbuchung";
+      kasten.innerHTML = "";
+      kasten.appendChild(f);
+    });
+  });
+
   /* Videofilter */
   var filters = document.querySelectorAll(".filters button");
   filters.forEach(function (b) {

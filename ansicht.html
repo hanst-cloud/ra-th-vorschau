@@ -42,6 +42,8 @@
   .stage[data-dev="desktop"] .fit { width: 100%; height: 100%; }
   .device { transform-origin: top left; background: #0B0E0D; border-radius: 46px; padding: 14px; box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 0 1px #3A4542; }
   .stage[data-dev="ipad"] .device { border-radius: 34px; }
+  .stage[data-dev="laptop"] .device { border-radius: 16px; }
+  .stage[data-dev="laptop"] iframe { border-radius: 6px; }
   .stage[data-dev="desktop"] .device { width: 100%; height: 100%; padding: 0; border-radius: 0; box-shadow: none; transform: none !important; }
   iframe { display: block; width: 100%; height: 100%; border: 0; background: #FFFFFF; border-radius: 32px; }
   .stage[data-dev="ipad"] iframe { border-radius: 20px; }
@@ -68,6 +70,7 @@
   <div class="title"><b>Entwurf ra-th.de</b> <span>· Ansicht</span></div>
   <div class="seg" role="group" aria-label="Gerät wählen">
     <button type="button" data-dev="desktop" aria-pressed="true">Desktop</button>
+    <button type="button" data-dev="laptop" aria-pressed="false">Laptop</button>
     <button type="button" data-dev="ipad" aria-pressed="false">iPad</button>
     <button type="button" data-dev="iphone" aria-pressed="false">iPhone</button>
   </div>
@@ -121,6 +124,7 @@
   var OEFFENTLICH = "https://hanst-cloud.github.io/ra-th-vorschau/";
   var GERAETE = {
     desktop: { name: "Desktop", w: 0, h: 0 },
+    laptop:  { name: "Laptop", w: 1366, h: 768 },
     ipad:    { name: "iPad (hochkant)", w: 820, h: 1180 },
     iphone:  { name: "iPhone", w: 390, h: 844 }
   };
@@ -159,7 +163,7 @@
     try {
       var doc = rahmen.contentDocument; if (!doc || !doc.head) return;
       var st = doc.getElementById("ansicht-rollbalken");
-      if (geraet === "desktop") { if (st) st.remove(); return; }
+      if (geraet === "desktop" || geraet === "laptop") { if (st) st.remove(); return; }
       if (!st) {
         st = doc.createElement("style"); st.id = "ansicht-rollbalken";
         st.textContent = "html{scrollbar-width:none}html::-webkit-scrollbar{display:none}";
